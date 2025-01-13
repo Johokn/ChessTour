@@ -1,53 +1,46 @@
-const rows = [
-    { nr: 1, points: ['H6', 'H2', 'S3', 'H4', 'S5'] },
-    { nr: 2, points: ['H5', 'S1', 'H6', 'H3', 'S4'] },
-    { nr: 3, points: ['H4', 'S5', 'H1', 'S2', 'H6'] },
-    { nr: 4, points: ['S3', 'S6', 'H5', 'S1', 'H2'] },
-    { nr: 5, points: ['S2', 'H3', 'S4', 'S6', 'H1'] },
-    { nr: 6, points: ['S1', 'H4', 'S2', 'H5', 'S3'] },
-];
+const API_URL = 'https://script.google.com/u/0/home/projects/1HC9XXo7yrwmRd_8XkSz5kakxUWU3d5yF9uyp-3ym14-4VBSNQIo1eBKC/edit';
 
-rows.forEach(row => {
-    document.write(`<tr>
-        <td>${row.nr}</td>
-        <td><input type="text" placeholder="Navn"></td>
-        ${row.points.map(p => `<td>${p}<br><select>
-            <option value="0">0</option>
-            <option value="0.5">½</option>
-            <option value="1">1</option>
-        </select></td>`).join('')}
-        <td class="sum">0</td>
-        <td class="placement">-</td>
-    </tr>`);
-});
+// Hent data fra Google Sheets
+async function fetchData() {
+    try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
 
-function calculateScores() {
-    const table = document.getElementById('scoreTable');
-    const rows = Array.from(table.querySelectorAll('tbody tr'));
+        const tbody = document.querySelector('#scoreTable tbody');
+        tbody.innerHTML = ''; // Ryd eksisterende rækker
 
-    rows.forEach(row => {
-        const cells = Array.from(row.querySelectorAll('td'));
-        const scoreCells = cells.slice(2, 7);
+        data.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${row[0]}</td>
+                <td>${row[1]}</td>
+                <td>${row[2]}</td>
+                <td>${row[3]}</td>
+                <td>${row[4]}</td>
+                <td>${row[5]}</td>
+                <td>${row[6]}</td>
+                <td>${row[7]}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (error) {
+        console.error('Fejl ved hentning af data:', error);
+    }
+}
 
-        const sum = scoreCells.reduce((total, cell) => {
-            const select = cell.querySelector('select');
-            return total + (select ? parseFloat(select.value) || 0 : 0);
-        }, 0);
-
-        const sumCell = cells[7];
-        sumCell.textContent = sum;
-    });
-
-    const sortedRows = rows.slice().sort((a, b) => {
-        const aSum = parseFloat(a.querySelector('.sum').textContent);
-        const bSum = parseFloat(b.querySelector('.sum').textContent);
-        return bSum - aSum;
-    });
-
-    sortedRows.forEach((row, index) => {
-        row.querySelector('.placement').textContent = index + 1;
-    });
-
-    const tbody = table.querySelector('tbody');
-    sortedRows.forEach(row => tbody.appendChild(row));
+// Send data til Google Sheets
+async function sendData() {
+    const newRow = ['Navn', 1, 0.5, 1, 0, 1, 3.5, '1']; // Eksempel på data
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newRow),
+        });
+        const text = await response.text();
+        console.log('Svar fra serveren:', text);
+    } catch (error) {
+        console.error('Fejl ved sending af data:', error);
+    }
 }
