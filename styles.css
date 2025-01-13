@@ -1,29 +1,32 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    table-layout: fixed; /* Sikrer, at kolonnebredden kan justeres jævnt */
 }
 
 th, td {
-    border: 1px solid #ddd;
     text-align: center;
     padding: 8px;
+    border: 1px solid #ddd;
 }
 
 th {
     background-color: #f4f4f4;
 }
 
-select {
-    width: 90%;
-    box-sizing: border-box;
+/* Specifik bredde til kolonner */
+th:nth-child(2), td:nth-child(2) {
+    width: 20%; /* Reducér "Navn"-kolonnen */
 }
 
-.highlight {
-    background-color: #dff0d8;
+th:nth-child(n+3):nth-child(-n+7), td:nth-child(n+3):nth-child(-n+7) {
+    width: 15%; /* Giv lidt mere plads til resultatsceller */
+}
+
+th:nth-child(8), td:nth-child(8) {
+    width: 10%; /* "I alt"-kolonnen */
+}
+
+th:nth-child(9), td:nth-child(9) {
+    width: 10%; /* "Plac."-kolonnen */
 }
