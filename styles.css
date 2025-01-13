@@ -1,33 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Fordeler kolonnebredden mere jævnt */
+    table-layout: fixed; /* Forhindrer at kolonnerne bliver for brede */
 }
 
 th, td {
     text-align: center;
     padding: 8px;
     border: 1px solid #ddd;
-    word-wrap: break-word; /* Tillader ord at brydes, hvis de er for lange */
 }
 
 th {
     background-color: #f4f4f4;
 }
 
-/* Juster bredden af specifikke kolonner */
+/* Navn-kolonnen skal være mindre */
 th:nth-child(2), td:nth-child(2) {
-    width: 15%; /* Reducer "Navn"-kolonnens bredde */
+    width: 20%; /* Begræns "Navn"-kolonnen */
 }
 
+/* Øg bredden af resultatkolonnerne */
 th:nth-child(n+3):nth-child(-n+7), td:nth-child(n+3):nth-child(-n+7) {
-    width: 17%; /* Øg pladsen til resultatkolonner */
+    width: 14%;
 }
 
+/* Plads til "I alt" og "Plac." */
 th:nth-child(8), td:nth-child(8) {
-    width: 12%; /* "I alt"-kolonnen */
+    width: 12%;
 }
 
 th:nth-child(9), td:nth-child(9) {
-    width: 10%; /* "Plac."-kolonnen */
+    width: 10%;
+}
+
+/* Responsiv tabel til små skærme */
+@media (max-width: 600px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    th, td {
+        min-width: 80px; /* Minimum bredde for bedre visning på små skærme */
+    }
 }
