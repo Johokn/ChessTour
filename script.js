@@ -10,7 +10,7 @@ const rows = [
 rows.forEach(row => {
     document.write(`<tr>
         <td>${row.nr}</td>
-        <td><input type="text" placeholder="Navn"></td>
+        <td><input type="text" placeholder="Navn" maxlength="20"></td> <!-- Tilføjet maxlength -->
         ${row.points.map(p => `<td>${p}<br><select>
             <option value="0">0</option>
             <option value="0.5">½</option>
@@ -19,6 +19,8 @@ rows.forEach(row => {
         <td class="sum">0</td>
         <td class="placement">-</td>
     </tr>`);
+});
+
 });
 
 function calculateScores() {
@@ -51,3 +53,5 @@ function calculateScores() {
     const tbody = table.querySelector('tbody');
     sortedRows.forEach(row => tbody.appendChild(row));
 }
+
+
